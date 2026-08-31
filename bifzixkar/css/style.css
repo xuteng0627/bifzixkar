@@ -1442,6 +1442,88 @@ a { color: inherit; text-decoration: none; transition: color 0.2s ease; }
 .lightbox-close:hover { background: rgba(255,255,255,0.3); }
 
 /* ==============================
+   CULTURE ARCHIVE SECTION
+   ============================== */
+.section-culture-archive { background: var(--c-bg-warm); }
+
+.culture-archive-content {
+  max-width: var(--container-narrow);
+  margin: 0 auto;
+}
+
+.culture-archive-paragraph {
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: var(--c-text);
+  margin-bottom: 20px;
+  text-indent: 2em;
+}
+
+.culture-archive-paragraph:last-child { margin-bottom: 0; }
+
+/* ==============================
+   WEDDING/FUNERAL BRANCH IMAGE
+   ============================== */
+.wedding-content .wf-image {
+  width: 400px;
+  max-width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-md);
+}
+
+.wedding-content .wf-image img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
+
+/* ==============================
+   HOME BUILDING SUB-ITEMS
+   ============================== */
+.building-content .home-sub-item {
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid var(--c-border);
+}
+
+.building-content .home-sub-title {
+  font-family: var(--f-serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--c-ink);
+  margin-bottom: 20px;
+  padding-left: 14px;
+  border-left: 3px solid var(--c-gold);
+}
+
+.building-content .home-sub-image {
+  width: 400px;
+  max-width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-md);
+}
+
+.building-content .home-sub-image img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
+
+.building-content .home-sub-paragraph {
+  font-size: 1.02rem;
+  line-height: 1.85;
+  color: var(--c-text);
+  text-indent: 2em;
+  margin-bottom: 0;
+}
+
+/* ==============================
    RESPONSIVE
    ============================== */
 @media (max-width: 900px) {
