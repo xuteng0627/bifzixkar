@@ -209,9 +209,12 @@ function parseData(t){
   try{
     S.zh=exD(t,'dataZh'); S.en=exD(t,'dataEn');
     if(!S.zh||!S.en){toast('数据解析失败',1);return}
-    // Keep deep copies of original data for merge-on-save
+    // Keep deep copies of TRUE original data (before sync) for merge-on-save
     S._origZh=JSON.parse(JSON.stringify(S.zh));
     S._origEn=JSON.parse(JSON.stringify(S.en));
+    // Sync array lengths at load time so zh/en stay aligned during editing
+    syncArrays(S.zh, S.en);
+    syncArrays(S.en, S.zh);
     if(S.zh.hero)delete S.zh.hero.tagline;
     if(S.en.hero)delete S.en.hero.tagline;
     if(S.zh.footer)delete S.zh.footer.credit;
@@ -772,20 +775,36 @@ function addProd(cat){
   renderSection();
 }
 
-// Deep merge: preserve fields from orig that edited doesn't have (for objects), but use edited arrays as-is
+// Sync arrays between two data objects: pad shorter arrays to match longer ones
+function syncArrays(a, b){
+  if(!a||typeof a!=='object'||!b||typeof b!=='object')return;
+  for(var k in b){
+    if(!b.hasOwnProperty(k))continue;
+    if(Array.isArray(b[k])){
+      if(!Array.isArray(a[k]))a[k]=[];
+      while(a[k].length<b[k].length){
+        a[k].push(typeof b[k][0]==='object'&&b[k][0]!==null?{}:'');
+      }
+    }else if(typeof b[k]==='object'&&!Array.isArray(b[k])){
+      if(typeof a[k]!=='object'||Array.isArray(a[k]))a[k]={};
+      syncArrays(a[k],b[k]);
+    }
+  }
+}
+
+// Deep merge: preserve fields from orig that edited doesn't have (for objects)
 function deepMerge(orig, edited){
   if(!orig || typeof orig !== 'object') return edited;
   if(!edited || typeof edited !== 'object') return edited;
   if(Array.isArray(orig) || Array.isArray(edited)){
-    // Object arrays: merge element-by-element, preserving orig values when edited fields are empty
     var oArr=Array.isArray(orig)?orig:[];
     var eArr=Array.isArray(edited)?edited:[];
+    // Object arrays: preserve ALL orig items, merge with edited by index, append extra edited items
     if(oArr.length>0&&typeof oArr[0]==='object'&&oArr[0]!==null){
-      var maxLen=Math.max(oArr.length,eArr.length);
       var arrResult=[];
-      for(var i=0;i<maxLen;i++){
-        var oItem=oArr[i],eItem=eArr[i];
-        if(oItem&&eItem&&typeof oItem==='object'&&typeof eItem==='object'){
+      for(var i=0;i<oArr.length;i++){
+        var oItem=oArr[i],eItem=i<eArr.length?eArr[i]:null;
+        if(eItem&&typeof eItem==='object'){
           var merged={};
           for(var k in oItem)if(oItem.hasOwnProperty(k))merged[k]=oItem[k];
           for(var k in eItem){
@@ -798,11 +817,13 @@ function deepMerge(orig, edited){
             }
           }
           arrResult.push(merged);
-        }else if(eItem!==undefined){
-          arrResult.push(eItem);
-        }else if(oItem!==undefined){
-          arrResult.push(oItem);
+        }else{
+          arrResult.push(JSON.parse(JSON.stringify(oItem)));
         }
+      }
+      // Append extra edited items beyond orig length (genuinely new items)
+      for(var i=oArr.length;i<eArr.length;i++){
+        arrResult.push(eArr[i]);
       }
       return arrResult;
     }
