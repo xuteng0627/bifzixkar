@@ -765,13 +765,50 @@ function rProd(){
   document.getElementById('contentArea').innerHTML=h;
 }
 function delProd(cat,i){showCf('删除产品','确认删除此产品？',function(){S.zh.products[cat].items.splice(i,1);S.en.products[cat].items.splice(i,1);renderSection()})}
-function addProd(cat){S.zh.products[cat].items.push({name:'',price:'',image:'',link:''});S.en.products[cat].items.push({name:'',price:'',image:'',link:''});renderSection()}
+function addProd(cat){
+  var item={name:'',price:'',image:'',link:''};
+  S.zh.products[cat].items.push(JSON.parse(JSON.stringify(item)));
+  S.en.products[cat].items.push(JSON.parse(JSON.stringify(item)));
+  renderSection();
+}
 
 // Deep merge: preserve fields from orig that edited doesn't have (for objects), but use edited arrays as-is
 function deepMerge(orig, edited){
   if(!orig || typeof orig !== 'object') return edited;
   if(!edited || typeof edited !== 'object') return edited;
-  if(Array.isArray(orig) || Array.isArray(edited)) return edited;
+  if(Array.isArray(orig) || Array.isArray(edited)){
+    // Object arrays: merge element-by-element, preserving orig values when edited fields are empty
+    var oArr=Array.isArray(orig)?orig:[];
+    var eArr=Array.isArray(edited)?edited:[];
+    if(oArr.length>0&&typeof oArr[0]==='object'&&oArr[0]!==null){
+      var maxLen=Math.max(oArr.length,eArr.length);
+      var arrResult=[];
+      for(var i=0;i<maxLen;i++){
+        var oItem=oArr[i],eItem=eArr[i];
+        if(oItem&&eItem&&typeof oItem==='object'&&typeof eItem==='object'){
+          var merged={};
+          for(var k in oItem)if(oItem.hasOwnProperty(k))merged[k]=oItem[k];
+          for(var k in eItem){
+            if(eItem.hasOwnProperty(k)){
+              if(typeof eItem[k]==='string'&&eItem[k]===''&&merged.hasOwnProperty(k)){
+                /* keep orig value when edited field is empty */
+              }else{
+                merged[k]=eItem[k];
+              }
+            }
+          }
+          arrResult.push(merged);
+        }else if(eItem!==undefined){
+          arrResult.push(eItem);
+        }else if(oItem!==undefined){
+          arrResult.push(oItem);
+        }
+      }
+      return arrResult;
+    }
+    // Primitive arrays (e.g. paragraphs): use edited as-is
+    return eArr.length>0?eArr:oArr;
+  }
   var result = {};
   // Copy all keys from orig first
   for(var k in orig){ if(orig.hasOwnProperty(k)) result[k] = orig[k]; }
@@ -796,6 +833,7 @@ async function saveAll(){
     if(!tpl){toast('请先加载 app.js',1);return}
 
     // Deep-merge edited data with original parsed data to preserve unknown fields
+    // deepMerge now handles arrays element-by-element, preserving orig values for empty edited fields
     var zhMerged = deepMerge(S._origZh, S.zh);
     var enMerged = deepMerge(S._origEn, S.en);
 
