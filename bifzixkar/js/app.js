@@ -27,6 +27,13 @@
       "Staying Bifzixkar 试图提供另一种可能：让本地年轻人成为自己文化的记录者与叙述者，同时通过文化周边产品的销售创造实际经济收益，使\"留在家乡\"成为一个有尊严、有可持续收入的选择。"
     ]
   },
+  "cultureArchive": {
+    "sectionTitle": "文化档案",
+    "sectionSubtitle": "Culture Archive",
+    "paragraphs": [
+      "这里的文化档案不以“展示民族文化”为目的，而以“记录真实生活经验”为导向——包括正在消失的、被误解的、从未被讲述的部分。档案是周边产品的内容来源与叙事依据，周边产品是档案可持续运营的经济基础。"
+    ]
+  },
   "weave": {
     "sectionTitle": "织·西兰卡普",
     "sectionSubtitle": "Weave-Xilankapu",
@@ -153,6 +160,13 @@
     "image": "images/home-construction.jpg",
     "paragraphs": [
       "彭家寨的吊脚楼建造遵循严格的传统规矩。材料只取阳坡杉木，正屋采用\"三柱四骑\"结构，象征天地人三才。\"吊脚楼全凭榫卯相连，不用一钉一铆，修旧如旧时必须用传统的榫卯结构修复，不动建筑筋骨。建筑布局上，彭家寨依山就势，单户多为正屋三间、厢房吊层的格局，常以一正一横为主，一正两横的\"撮箕口\"为辅，与院坝相围成小庭院式，各自成为独立封闭的空间。"
+    ],
+    "subItems": [
+      {
+        "title": "吊脚楼",
+        "image": "images/home/diaojiaolou.jpg",
+        "content": "吊脚楼底层架空，隔离地面，有助于通风防潮，避免蛇虫野兽侵扰。同时，吊脚楼分层利用空间，下层饲养牲畜，堆放杂物，上层居住，储藏粮食。"
+      }
     ]
   },
   "weddingFuneral": {
@@ -162,11 +176,13 @@
       {
         "title": "哭嫁",
         "titleEn": "Crying-wedding",
+        "image": "images/custom/kuojia.jpg",
         "content": "女人在结婚前7-20天就开始哭，有的哭一个多月，至少三五天。婚礼歌曲有哭父母，哭哥哥嫂子，哭叔叔，哭姐姐，哭媒人，哭梳头，哭戴花，哭告别爸爸妈妈，哭祭祖，哭上轿子等。开始轻声唱歌，越接近结婚的日子越难过。诉说父母养育之恩、兄弟姐妹的深厚情谊和离别之感，或者是表达自己对未来生活的一种担心，女方在要出嫁的前一天和第二天上轿前哭嫁达到了高潮，哭声伴随着铜锣声，鞭炮声，场面非常震撼。哭嫁不是嚎啕大哭，乱哭一通，而是要哭的好听，哭的感人，哭的让人共情。"
       },
       {
         "title": "跳丧舞",
         "titleEn": "Jumping funeral dance",
+        "image": "images/custom/tiaosangwu.jpg",
         "content": "豁达的生命礼赞。土家老人寿终正寝后，亲友会通宵达旦地跳\"撒叶儿嗬\"，用雄健的舞蹈和歌谣来送别亡者，庆祝其圆满的一生。这绝非悲伤，而是土家人\"欢欢喜喜送亡人\"的豁达生死观。若在旅行中偶遇，请保持肃穆与尊重。"
       }
     ]
@@ -556,6 +572,13 @@
       "\"Staying Bifzixkar\" seeks to offer an alternative approach: empowering local youth to serve as recorders and narrators of their own culture, while generating tangible economic benefits through the sale of cultural merchandise, thereby making \"staying in the hometown\" a dignified and financially sustainable choice."
     ]
   },
+  "cultureArchive": {
+    "sectionTitle": "Culture Archive",
+    "sectionSubtitle": "Culture Archive",
+    "paragraphs": [
+      "Archives are not intended for \"displaying national culture,\" but are guided by the aim of \"recording real-life experiences\", including those aspects that are disappearing, misunderstood, or never before recounted. Archives serve as the source of content and the basis of narrative for peripheral products; in turn, peripheral products constitute the economic foundation for the sustainable operation of archives."
+    ]
+  },
   "weave": {
     "sectionTitle": "Weave · Xilankapu",
     "sectionSubtitle": "Weave · Xilankapu",
@@ -681,6 +704,13 @@
     "sectionSubtitle": "House-Building Conventions",
     "paragraphs": [
       "The stilt-house dwellings of Pengjiazhai were constructed in strict accordance with traditional building principles. The construction materials were exclusively sourced from fir wood harvested from the sunny slopes. The main house employs a \"three-pillar, four-ride\" structural design, symbolizing the three fundamental elements of heaven, earth, and humanity. These stilt houses are entirely assembled using mortise-and-tenon joints—no nails or rivets are used; when restoring these structures to their original condition, the traditional mortise-and-tenon technique must be employed without altering the building's structural framework. In terms of architectural layout, Pengjiazhai is built in harmony with the natural contours of the mountain terrain. Most individual households feature a layout consisting of a three-bay main house flanked by side rooms on a raised platform; this configuration typically follows a \"one main, one cross\" pattern, supplemented by a \"strainer-mouth\" layout (one main house with two cross wings), all together forming a small courtyard-style compound where each unit constitutes an independent, enclosed space."
+    ],
+    "subItems": [
+      {
+        "title": "Stilt House",
+        "image": "images/home/diaojiaolou.jpg",
+        "content": "The ground floor of the stilt-house is elevated above the ground, creating a barrier that enhances ventilation and prevents moisture buildup, while also deterring snakes, insects and wild animals. Additionally, the stilt-house makes efficient use of its multi-level layout: the lower level is used for raising livestock and storing miscellaneous items, whereas the upper level serves as the living space and storage area for food."
+      }
     ]
   },
   "weddingFuneral": {
@@ -690,11 +720,13 @@
       {
         "title": "Crying-wedding",
         "titleEn": "Crying-wedding",
+        "image": "images/custom/kuojia.jpg",
         "content": "Women begin sobbing 7–20 days before their wedding. Some may sob for over a month, or at least three to five days. The wedding songs often include lamentations for their parents, their elder brothers and sisters-in-law, their uncles, their elder sisters, the matchmaker, the process of braiding their hair, wearing the wedding flowers, bidding farewell to their parents, paying respects to their ancestors, and entering the bridal sedan chair. At first, they sing softly. However, as the wedding date approaches, their sorrow intensifies. During these songs, the bride expresses gratitude for her parents' nurturing care, reminisces about the deep bonds with her siblings, and reflects on the sense of parting. She may also voice her concerns regarding her future life. The sobbing ceremony reaches its climax on the day before the wedding and just before entering the bridal sedan chair. The cries are accompanied by the sound of gongs and firecrackers, creating a profoundly moving scene. The wedding crying ceremony is not about loud, uncontrollable weeping. It requires sobbing in a beautiful, touching manner that evokes empathy from all present."
       },
       {
         "title": "Jumping funeral dance",
         "titleEn": "Jumping funeral dance",
+        "image": "images/custom/tiaosangwu.jpg",
         "content": "A celebration of a broad-minded approach to life. When a Tujia elder passes away, relatives and friends will perform the 'Sa Ye Er He' dance throughout the night, using vigorous dance movements and traditional songs to bid farewell to the deceased and celebrate their fulfilling life. This is by no means sadness. It reflects the Tujia people's open-minded perspective on life and death, characterized by \"joyfully bidding farewell to the departed.\" If you encounter this ritual during your travels, please maintain solemnity and respect."
       }
     ]
@@ -1168,6 +1200,7 @@
   function renderAll() {
     renderHero();
     renderProjectBg();
+    renderCultureArchive();
     renderWeave();
     renderCustom();
     renderObjects();
@@ -1210,6 +1243,22 @@
       data.projectBg.paragraphs.forEach(function(text) {
         var p = document.createElement('p');
         p.className = 'project-bg-paragraph fade-in';
+        p.textContent = text;
+        content.appendChild(p);
+      });
+    }
+  }
+
+  /* ====== Culture Archive ====== */
+  function renderCultureArchive() {
+    setText('[data-i18n="cultureArchive.sectionTitle"]', data.cultureArchive.sectionTitle);
+    setText('[data-i18n="cultureArchive.sectionSubtitle"]', data.cultureArchive.sectionSubtitle);
+    var content = document.getElementById('cultureArchiveContent');
+    if (content) {
+      content.innerHTML = '';
+      data.cultureArchive.paragraphs.forEach(function(text) {
+        var p = document.createElement('p');
+        p.className = 'culture-archive-paragraph fade-in';
         p.textContent = text;
         content.appendChild(p);
       });
@@ -1333,6 +1382,32 @@
         p.textContent = text;
         buildingContent.appendChild(p);
       });
+      if (data.homeConstruction.subItems) {
+        data.homeConstruction.subItems.forEach(function(sub) {
+          var subDiv = document.createElement('div');
+          subDiv.className = 'home-sub-item fade-in';
+          var subTitle = document.createElement('h4');
+          subTitle.className = 'home-sub-title';
+          subTitle.textContent = sub.title;
+          subDiv.appendChild(subTitle);
+          if (sub.image) {
+            var subImgWrap = document.createElement('div');
+            subImgWrap.className = 'home-sub-image';
+            var subImg = document.createElement('img');
+            subImg.src = resolveImg(sub.image, 'images/');
+            subImg.alt = sub.title;
+            subImg.loading = 'lazy';
+            subImg.onerror = function() { subImgWrap.style.display = 'none'; };
+            subImgWrap.appendChild(subImg);
+            subDiv.appendChild(subImgWrap);
+          }
+          var subP = document.createElement('p');
+          subP.className = 'home-sub-paragraph';
+          subP.textContent = sub.content;
+          subDiv.appendChild(subP);
+          buildingContent.appendChild(subDiv);
+        });
+      }
     }
     // Wedding & Funeral (婚丧仪式)
     var weddingContent = document.getElementById('weddingContent');
@@ -1345,6 +1420,17 @@
         branchTitle.className = 'wf-branch-title';
         branchTitle.textContent = currentLang === 'zh' ? branch.title : branch.titleEn;
         branchDiv.appendChild(branchTitle);
+        if (branch.image) {
+          var branchImgWrap = document.createElement('div');
+          branchImgWrap.className = 'wf-image';
+          var branchImg = document.createElement('img');
+          branchImg.src = resolveImg(branch.image, 'images/');
+          branchImg.alt = currentLang === 'zh' ? branch.title : branch.titleEn;
+          branchImg.loading = 'lazy';
+          branchImg.onerror = function() { branchImgWrap.style.display = 'none'; };
+          branchImgWrap.appendChild(branchImg);
+          branchDiv.appendChild(branchImgWrap);
+        }
         var p = document.createElement('p');
         p.className = 'wf-paragraph fade-in';
         p.textContent = branch.content;
