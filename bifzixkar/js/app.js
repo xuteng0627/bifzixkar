@@ -473,12 +473,6 @@
           "price": "RMB 398.00",
           "image": "images/products/home3.jpg",
           "link": "https://item.taobao.com/item.htm?id=929647215619"
-        },
-        {
-          "name": "测试",
-          "image": "牛排.png",
-          "price": "59",
-          "link": "https://item.taobao.com/item.htm?id=624528913455"
         }
       ]
     },
@@ -1017,12 +1011,6 @@
           "price": "RMB 398.00",
           "image": "images/products/home3.jpg",
           "link": "https://item.taobao.com/item.htm?id=929647215619"
-        },
-        {
-          "name": "测试2",
-          "price": "95",
-          "image": "牛排.png",
-          "link": "https://item.taobao.com/item.htm?id=624528913455"
         }
       ]
     },
