@@ -125,7 +125,8 @@ var S={section:'hero',zh:null,en:null,sha:null};
 // ============ GitHub API Helpers ============
 function ghFetch(path){
   return fetch(GH_API+'/contents/'+path+'?ref='+GH.branch,{
-    headers:{'Authorization':'token '+GH.token,'Accept':'application/vnd.github.v3+json'}
+    headers:{'Authorization':'token '+GH.token,'Accept':'application/vnd.github.v3+json'},
+    cache:'no-store'
   }).then(function(r){
     if(!r.ok)throw new Error('HTTP '+r.status);
     return r.json();
@@ -150,7 +151,13 @@ function ghPut(path,content,message,sha){
 }
 
 function getAppJs(){
-  return ghFetch(GH.basePath);
+  return fetch(GH_API+'/contents/'+GH.basePath+'?ref='+GH.branch+'&_t='+Date.now(),{
+    headers:{'Authorization':'token '+GH.token,'Accept':'application/vnd.github.v3+json'},
+    cache:'no-store'
+  }).then(function(r){
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    return r.json();
+  });
 }
 
 function putAppJs(content,sha){
@@ -787,11 +794,11 @@ async function saveAll(){
     if(!GH.token){toast('请先连接 GitHub',1);return}
     var tpl=document.getElementById('appjs-template').textContent;
     if(!tpl){toast('请先加载 app.js',1);return}
-    
+
     // Deep-merge edited data with original parsed data to preserve unknown fields
     var zhMerged = deepMerge(S._origZh, S.zh);
     var enMerged = deepMerge(S._origEn, S.en);
-    
+
     var zhJs=JSON.stringify(zhMerged,null,2);
     var enJs=JSON.stringify(enMerged,null,2);
 
@@ -809,6 +816,16 @@ async function saveAll(){
     }catch(e){/* use existing sha */}
     var result=await putAppJs(r2,S.sha);
     S.sha=result.content.sha;
+
+    // Update template to new content so subsequent saves use fresh base
+    document.getElementById('appjs-template').textContent=r2;
+    // Re-parse originals from new template for next save cycle
+    S._origZh=JSON.parse(JSON.stringify(zhMerged));
+    S._origEn=JSON.parse(JSON.stringify(enMerged));
+
+    // Update index.html cache-busting so live site loads fresh app.js
+    try{ await updateCacheBust(); }catch(e){/* non-critical */}
+
     toast('已提交到 GitHub！',0);
     document.getElementById('btnSave').textContent='提交到 GitHub';
     document.getElementById('btnSave').disabled=false;
@@ -817,6 +834,21 @@ async function saveAll(){
     document.getElementById('btnSave').textContent='提交到 GitHub';
     document.getElementById('btnSave').disabled=false;
   }
+}
+
+// Update cache-busting version in index.html on GitHub
+async function updateCacheBust(){
+  var idxPath='bifzixkar/index.html';
+  var idxResult=await ghFetch(idxPath);
+  var idxBin=atob(idxResult.content);
+  var idxBytes=new Uint8Array(idxBin.length);
+  for(var i=0;i<idxBin.length;i++)idxBytes[i]=idxBin.charCodeAt(i);
+  var idxContent=new TextDecoder('utf-8').decode(idxBytes);
+  var today=new Date().toISOString().slice(0,10).replace(/-/g,'');
+  idxContent=idxContent.replace(/js\/app\.js\?v=[^\s"']*/g,'js/app.js?v='+today);
+  idxContent=idxContent.replace(/css\/style\.css\?v=[^\s"']*/g,'css/style.css?v='+today);
+  var idxB64=btoa(unescape(encodeURIComponent(idxContent)));
+  await ghPut(idxPath,idxB64,'Update cache-bust via editor',idxResult.sha);
 }
 
 function replData(tpl,varName,json){
