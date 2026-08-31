@@ -802,6 +802,11 @@ async function saveAll(){
 
     document.getElementById('btnSave').textContent='提交中...';
     document.getElementById('btnSave').disabled=true;
+    // Fetch latest SHA to avoid mismatch if file was modified externally
+    try{
+      var latest=await ghFetch(GH.basePath);
+      S.sha=latest.sha;
+    }catch(e){/* use existing sha */}
     var result=await putAppJs(r2,S.sha);
     S.sha=result.content.sha;
     toast('已提交到 GitHub！',0);
