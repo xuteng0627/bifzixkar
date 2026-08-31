@@ -1465,8 +1465,8 @@ a { color: inherit; text-decoration: none; transition: color 0.2s ease; }
    WEDDING/FUNERAL BRANCH IMAGE
    ============================== */
 .wedding-content .wf-image {
-  width: 400px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 720px;
   border-radius: 12px;
   overflow: hidden;
   margin-bottom: 20px;
@@ -1500,8 +1500,8 @@ a { color: inherit; text-decoration: none; transition: color 0.2s ease; }
 }
 
 .building-content .home-sub-image {
-  width: 400px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 720px;
   border-radius: 12px;
   overflow: hidden;
   margin-bottom: 20px;
