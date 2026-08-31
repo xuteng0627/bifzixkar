@@ -183,7 +183,10 @@ function connectGitHub(){
   document.getElementById('saveStatus').textContent='连接中...';
   getAppJs().then(function(result){
     S.sha=result.sha;
-    var content=atob(result.content);
+    var bin=atob(result.content);
+    var bytes=new Uint8Array(bin.length);
+    for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+    var content=new TextDecoder('utf-8').decode(bytes);
     document.getElementById('appjs-template').textContent=content;
     parseData(content);
     document.getElementById('btnSave').style.display='';
