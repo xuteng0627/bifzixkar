@@ -826,9 +826,13 @@ async function saveAll(){
     // Update index.html cache-busting so live site loads fresh app.js
     try{ await updateCacheBust(); }catch(e){/* non-critical */}
 
-    toast('已提交到 GitHub！',0);
+    toast('已提交到 GitHub！正在打开线上页面...',0);
     document.getElementById('btnSave').textContent='提交到 GitHub';
     document.getElementById('btnSave').disabled=false;
+
+    // Auto-open live site with cache-busting so user sees changes immediately
+    var liveUrl='https://xuteng0627.github.io/bifzixkar/bifzixkar/index.html?v='+Date.now();
+    setTimeout(function(){ window.open(liveUrl,'_blank'); },1500);
   }catch(e){
     toast('提交失败: '+e.message,1);
     document.getElementById('btnSave').textContent='提交到 GitHub';
@@ -844,9 +848,10 @@ async function updateCacheBust(){
   var idxBytes=new Uint8Array(idxBin.length);
   for(var i=0;i<idxBin.length;i++)idxBytes[i]=idxBin.charCodeAt(i);
   var idxContent=new TextDecoder('utf-8').decode(idxBytes);
-  var today=new Date().toISOString().slice(0,10).replace(/-/g,'');
-  idxContent=idxContent.replace(/js\/app\.js\?v=[^\s"']*/g,'js/app.js?v='+today);
-  idxContent=idxContent.replace(/css\/style\.css\?v=[^\s"']*/g,'css/style.css?v='+today);
+  var now=new Date();
+  var ts=now.getFullYear()+String(now.getMonth()+1).padStart(2,'0')+String(now.getDate()).padStart(2,'0')+String(now.getHours()).padStart(2,'0')+String(now.getMinutes()).padStart(2,'0');
+  idxContent=idxContent.replace(/js\/app\.js\?v=[^\s"']*/g,'js/app.js?v='+ts);
+  idxContent=idxContent.replace(/css\/style\.css\?v=[^\s"']*/g,'css/style.css?v='+ts);
   var idxB64=btoa(unescape(encodeURIComponent(idxContent)));
   await ghPut(idxPath,idxB64,'Update cache-bust via editor',idxResult.sha);
 }
