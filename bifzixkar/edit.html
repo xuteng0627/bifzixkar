@@ -202,6 +202,9 @@ function parseData(t){
   try{
     S.zh=exD(t,'dataZh'); S.en=exD(t,'dataEn');
     if(!S.zh||!S.en){toast('数据解析失败',1);return}
+    // Keep deep copies of original data for merge-on-save
+    S._origZh=JSON.parse(JSON.stringify(S.zh));
+    S._origEn=JSON.parse(JSON.stringify(S.en));
     if(S.zh.hero)delete S.zh.hero.tagline;
     if(S.en.hero)delete S.en.hero.tagline;
     if(S.zh.footer)delete S.zh.footer.credit;
@@ -757,14 +760,40 @@ function rProd(){
 function delProd(cat,i){showCf('删除产品','确认删除此产品？',function(){S.zh.products[cat].items.splice(i,1);S.en.products[cat].items.splice(i,1);renderSection()})}
 function addProd(cat){S.zh.products[cat].items.push({name:'',price:'',image:'',link:''});S.en.products[cat].items.push({name:'',price:'',image:'',link:''});renderSection()}
 
+// Deep merge: preserve fields from orig that edited doesn't have (for objects), but use edited arrays as-is
+function deepMerge(orig, edited){
+  if(!orig || typeof orig !== 'object') return edited;
+  if(!edited || typeof edited !== 'object') return edited;
+  if(Array.isArray(orig) || Array.isArray(edited)) return edited;
+  var result = {};
+  // Copy all keys from orig first
+  for(var k in orig){ if(orig.hasOwnProperty(k)) result[k] = orig[k]; }
+  // Then overlay edited keys
+  for(var k in edited){
+    if(edited.hasOwnProperty(k)){
+      if(result.hasOwnProperty(k) && typeof result[k] === 'object' && !Array.isArray(result[k]) && typeof edited[k] === 'object' && !Array.isArray(edited[k])){
+        result[k] = deepMerge(result[k], edited[k]);
+      } else {
+        result[k] = edited[k];
+      }
+    }
+  }
+  return result;
+}
+
 // ============ Save (GitHub Contents API) ============
 async function saveAll(){
   try{
     if(!GH.token){toast('请先连接 GitHub',1);return}
     var tpl=document.getElementById('appjs-template').textContent;
     if(!tpl){toast('请先加载 app.js',1);return}
-    var zhJs=JSON.stringify(S.zh,null,2);
-    var enJs=JSON.stringify(S.en,null,2);
+    
+    // Deep-merge edited data with original parsed data to preserve unknown fields
+    var zhMerged = deepMerge(S._origZh, S.zh);
+    var enMerged = deepMerge(S._origEn, S.en);
+    
+    var zhJs=JSON.stringify(zhMerged,null,2);
+    var enJs=JSON.stringify(enMerged,null,2);
 
     var r1=replData(tpl,'dataZh',zhJs);
     if(!r1){toast('保存失败: 找不到 dataZh',1);return}
