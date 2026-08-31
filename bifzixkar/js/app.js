@@ -473,12 +473,6 @@
           "price": "RMB 398.00",
           "image": "images/products/home3.jpg",
           "link": "https://item.taobao.com/item.htm?id=929647215619"
-        },
-        {
-          "name": "测试",
-          "price": "95",
-          "image": "牛排.png",
-          "link": "https://item.taobao.com/item.htm?id=929647215619"
         }
       ]
     },
@@ -1016,12 +1010,6 @@
           "name": "Table Flag",
           "price": "RMB 398.00",
           "image": "images/products/home3.jpg",
-          "link": "https://item.taobao.com/item.htm?id=929647215619"
-        },
-        {
-          "name": "测试1",
-          "price": "59",
-          "image": "牛排.png",
           "link": "https://item.taobao.com/item.htm?id=929647215619"
         }
       ]
