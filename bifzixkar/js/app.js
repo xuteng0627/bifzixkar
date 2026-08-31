@@ -1011,12 +1011,6 @@
           "price": "RMB 398.00",
           "image": "images/products/home3.jpg",
           "link": "https://item.taobao.com/item.htm?id=929647215619"
-        },
-        {
-          "name": "",
-          "price": "",
-          "image": "d50f2295-6d5c-450c-9857-838ecf969710.png",
-          "link": ""
         }
       ]
     },
