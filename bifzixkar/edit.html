@@ -158,9 +158,9 @@ function putAppJs(content,sha){
   return ghPut(GH.basePath,b64,'Update app.js via editor',sha);
 }
 
-function putImage(subdir,fname,base64Data){
+function putImage(subdir,fname,base64Data,sha){
   var path='bifzixkar/'+subdir+'/'+fname;
-  return ghPut(path,base64Data,'Upload '+fname+' via editor',null);
+  return ghPut(path,base64Data,'Upload '+fname+' via editor',sha||null);
 }
 
 // ============ Init ============
@@ -392,7 +392,7 @@ async function uploadImg(btn,path,field){
           existSha=existing.sha;
         }catch(e){/* file doesn't exist yet, that's fine */}
         // Upload to GitHub
-        await putImage(subdir,fname,b64);
+        await putImage(subdir,fname,b64,existSha);
         // Write filename to BOTH zh and en data
         sVal('zh',path,field,fname);
         sVal('en',path,field,fname);
