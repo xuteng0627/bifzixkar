@@ -1,13 +1,35 @@
 /* ============================================
+
    Staying Bifzixkar - Main Application
+
    土家族文化档案网站 · 重构版
+
    ============================================ */
+
 (function () {
+
   'use strict';
+
+  // Auto-refresh on version change to bypass GitHub Pages CDN cache
+  var APP_VERSION = '202609010000';
+  try {
+    var storedVer = localStorage.getItem('bifzixkar_app_version');
+    if (storedVer && storedVer !== APP_VERSION) {
+      localStorage.setItem('bifzixkar_app_version', APP_VERSION);
+      window.location.reload(true);
+    } else if (!storedVer) {
+      localStorage.setItem('bifzixkar_app_version', APP_VERSION);
+    }
+  } catch(e) {}
+
+
 
   let currentLang = 'zh';
 
+
+
   /* ====== 中文数据 ====== */
+
   const dataZh = {
   "hero": {
     "title": "Staying Bifzixkar",
@@ -473,6 +495,12 @@
           "price": "RMB 398.00",
           "image": "images/products/home3.jpg",
           "link": "https://item.taobao.com/item.htm?id=929647215619"
+        },
+        {
+          "name": "测试",
+          "image": "牛排.png",
+          "price": "59",
+          "link": "https://item.taobao.com/item.htm?id=624528913455"
         }
       ]
     },
@@ -546,7 +574,10 @@
   }
 };
 
+
+
   /* ====== English Data ====== */
+
   const dataEn = {
   "hero": {
     "title": "Staying Bifzixkar",
@@ -1011,6 +1042,12 @@
           "price": "RMB 398.00",
           "image": "images/products/home3.jpg",
           "link": "https://item.taobao.com/item.htm?id=929647215619"
+        },
+        {
+          "name": "测试2",
+          "price": "95",
+          "image": "牛排.png",
+          "link": "https://item.taobao.com/item.htm?id=624528913455"
         }
       ]
     },
@@ -1084,867 +1121,1733 @@
   }
 };
 
+
+
   let data = dataZh;
 
+
+
   const bilingualLabels = {
+
     '习俗 Customs': { zh: '习俗', en: 'Customs' },
+
     '节气 Solar Terms': { zh: '节气', en: 'Solar Terms' },
+
     '禁忌 Taboos': { zh: '禁忌', en: 'Taboos' },
+
     '建房讲究 Building': { zh: '建房讲究', en: 'Home Construction' },
+
     '婚丧仪式 Wedding & Funeral': { zh: '婚丧仪式', en: 'Wedding & Funeral' }
+
   };
+
+
 
   const navLabels = {
+
     projectBg: { zh: '项目背景', en: 'Culture' },
+
     cultureArchive: { zh: '文化档案', en: 'Culture Archive' },
+
     weave: { zh: '织·西兰卡普', en: 'Weave' },
+
     custom: { zh: '俗·习俗与禁忌', en: 'Custom' },
+
     customs: { zh: '习俗', en: 'Customs' },
+
     solarTerms: { zh: '节气', en: 'Solar Terms' },
+
     taboos: { zh: '禁忌', en: 'Taboos' },
+
     building: { zh: '建房讲究', en: 'Home Construction' },
+
     weddingFuneral: { zh: '婚丧仪式', en: 'Wedding & Funeral' },
+
     object: { zh: '物·日常器物', en: 'Object' },
+
     sound: { zh: '声·方言与歌', en: 'Sound' },
+
     people: { zh: '人·当代土家人', en: 'People' },
+
     products: { zh: '文创产品', en: 'Products' },
+
     softFabrics: { zh: '纺织织物', en: 'Soft Textiles' },
+
     homeFurnishings: { zh: '家居软装', en: 'Home D\u00e9cor' },
+
     stationery: { zh: '文具小物件', en: 'Stationery' },
+
     outdoor: { zh: '户外生活方式', en: 'Outdoor & Living' }
+
   };
 
+
+
   function renderNavLabels() {
+
     var lang = currentLang;
+
     document.querySelectorAll('[data-nav-key]').forEach(function(el) {
+
       var key = el.getAttribute('data-nav-key');
+
       if (navLabels[key]) {
+
         el.textContent = navLabels[key][lang];
+
       }
+
     });
+
   }
+
+
 
   /* ====== Auto Language Detection ====== */
+
   function detectLanguage() {
+
     var lang = (navigator.languages && navigator.languages[0]) || navigator.language || 'zh';
+
     if (lang && lang.toLowerCase().indexOf('zh') === 0) {
+
       currentLang = 'zh';
+
       data = dataZh;
+
     } else {
+
       currentLang = 'en';
+
       data = dataEn;
+
       var btn = document.getElementById('langSwitch');
+
       if (btn) btn.textContent = '中文';
+
     }
+
     document.documentElement.lang = currentLang === 'zh' ? 'zh-CN' : 'en';
+
   }
+
+
 
   /* ====== Language Switch ====== */
+
   function initLangSwitch() {
+
     var btn = document.getElementById('langSwitch');
+
     if (!btn) return;
+
     btn.addEventListener('click', function() {
+
       if (currentLang === 'zh') {
+
         currentLang = 'en';
+
         data = dataEn;
+
         btn.textContent = '中文';
+
       } else {
+
         currentLang = 'zh';
+
         data = dataZh;
+
         btn.textContent = 'EN';
+
       }
+
       renderAll();
+
       // Re-init scroll spy after re-render
+
       initScrollSpy();
+
       initFadeIn();
+
       initModal();
+
     });
+
   }
+
+
 
   /* ====== Init ====== */
+
   function init() {
+
     try {
+
       detectLanguage();
+
       initLangSwitch();
+
       renderAll();
+
       initNavbar();
+
       initMobileNav();
+
       initBackToTop();
+
       initSmoothScroll();
+
       initScrollSpy();
+
       initFadeIn();
+
       initModal();
+
       setTimeout(function() {
+
         document.querySelectorAll('.fade-in:not(.visible)').forEach(function(el) {
+
           el.classList.add('visible');
+
         });
+
       }, 800);
+
     } catch (e) {
+
       console.error('Staying Bifzixkar init error:', e);
+
     }
+
   }
+
+
 
   /* ====== Render All ====== */
+
   function renderAll() {
+
     renderHero();
+
     renderProjectBg();
+
     renderCultureArchive();
+
     renderWeave();
+
     renderCustom();
+
     renderObjects();
+
     renderSounds();
+
     renderPeople();
+
     renderProducts();
+
     renderFooter();
+
     renderBilingualLabels();
+
     renderNavLabels();
+
     updatePageTitle();
+
   }
+
+
 
   /* ====== Hero ====== */
+
   function renderHero() {
+
     setText('[data-i18n="hero.title"]', data.hero.title);
+
     setText('[data-i18n="hero.subtitle"]', data.hero.subtitle);
+
     setText('[data-i18n="hero.description"]', data.hero.description);
+
     setText('[data-i18n="hero.cta1"]', data.hero.cta1);
+
     setText('[data-i18n="hero.cta2"]', data.hero.cta2);
+
     setText('[data-i18n="hero.cta3"]', data.hero.cta3);
+
   }
+
+
 
   /* ====== Project Background ====== */
+
   function renderProjectBg() {
+
     setText('[data-i18n="projectBg.sectionTitle"]', data.projectBg.sectionTitle);
+
     setText('[data-i18n="projectBg.sectionSubtitle"]', data.projectBg.sectionSubtitle);
+
     var imgContainer = document.getElementById('projectBgImage');
+
     if (imgContainer) {
+
       imgContainer.innerHTML = '';
+
       var img = document.createElement('img');
+
       img.src = resolveImg(data.projectBg.image, 'images/');
+
       img.alt = data.projectBg.sectionTitle;
+
       img.loading = 'lazy';
+
       img.onerror = function() { imgContainer.style.display = 'none'; };
+
       imgContainer.appendChild(img);
+
     }
+
     var content = document.getElementById('projectBgContent');
+
     if (content) {
+
       content.innerHTML = '';
+
       data.projectBg.paragraphs.forEach(function(text) {
+
         var p = document.createElement('p');
+
         p.className = 'project-bg-paragraph fade-in';
+
         p.textContent = text;
+
         content.appendChild(p);
+
       });
+
     }
+
   }
+
+
 
   /* ====== Culture Archive ====== */
+
   function renderCultureArchive() {
+
     setText('[data-i18n="cultureArchive.sectionTitle"]', data.cultureArchive.sectionTitle);
+
     setText('[data-i18n="cultureArchive.sectionSubtitle"]', data.cultureArchive.sectionSubtitle);
+
     var content = document.getElementById('cultureArchiveContent');
+
     if (content) {
+
       content.innerHTML = '';
+
       data.cultureArchive.paragraphs.forEach(function(text) {
+
         var p = document.createElement('p');
+
         p.className = 'culture-archive-paragraph fade-in';
+
         p.textContent = text;
+
         content.appendChild(p);
+
       });
+
     }
+
   }
+
+
 
   /* ====== Weave (Patterns) ====== */
+
   function renderWeave() {
+
     setText('[data-i18n="weave.sectionTitle"]', data.weave.sectionTitle);
+
     setText('[data-i18n="weave.sectionSubtitle"]', data.weave.sectionSubtitle);
+
     setText('[data-i18n="weave.description"]', data.weave.description);
+
     var grid = document.getElementById('patternGrid');
+
     if (!grid) return;
+
     grid.innerHTML = '';
+
     data.weave.patterns.forEach(function(pattern, index) {
+
       var card = document.createElement('div');
+
       card.className = 'pattern-card fade-in';
+
       card.dataset.index = index;
+
       var imageDiv = document.createElement('div');
+
       imageDiv.className = 'pattern-card-image';
+
       var img = document.createElement('img');
+
       img.src = resolveImg(pattern.image, 'images/weave/');
+
       img.alt = pattern.name;
+
       img.loading = 'lazy';
+
       img.onerror = function() { imageDiv.innerHTML = '<span class="placeholder-icon">&#x2726;</span>'; };
+
       imageDiv.appendChild(img);
+
       card.appendChild(imageDiv);
+
       var body = document.createElement('div');
+
       body.className = 'pattern-card-body';
+
       var nameEl = document.createElement('div');
+
       nameEl.className = 'pattern-card-name';
+
       nameEl.textContent = pattern.name;
+
       body.appendChild(nameEl);
+
       if (pattern.tujiaName) {
+
         var tujiaEl = document.createElement('div');
+
         tujiaEl.className = 'pattern-card-tujia';
+
         tujiaEl.textContent = pattern.tujiaName;
+
         body.appendChild(tujiaEl);
+
       }
+
       var symEl = document.createElement('div');
+
       symEl.className = 'pattern-card-symbolism';
+
       symEl.textContent = pattern.symbolism;
+
       body.appendChild(symEl);
+
       var moreEl = document.createElement('span');
+
       moreEl.className = 'pattern-card-more';
+
       moreEl.textContent = currentLang === 'zh' ? '查看详情 →' : 'View Details →';
+
       body.appendChild(moreEl);
+
       card.appendChild(body);
+
       card.addEventListener('click', function() { openPatternModal(index); });
+
       grid.appendChild(card);
+
     });
+
   }
+
+
 
   /* ====== Custom (Folkways) ====== */
+
   function renderCustom() {
+
     setText('[data-i18n="custom.sectionTitle"]', data.custom.sectionTitle);
+
     setText('[data-i18n="custom.sectionSubtitle"]', data.custom.sectionSubtitle);
+
     setText('[data-i18n="custom.description"]', data.custom.description);
+
     // Customs cards
+
     var customCards = document.getElementById('customCards');
+
     if (customCards) {
+
       customCards.innerHTML = '';
+
       data.custom.customs.forEach(function(c) {
+
         var card = document.createElement('div');
+
         card.className = 'custom-card fade-in';
+
         var h4 = document.createElement('h4');
+
         h4.textContent = c.title;
+
         card.appendChild(h4);
+
         if (c.subtitle) {
+
           var sub = document.createElement('div');
+
           sub.className = 'custom-subtitle';
+
           sub.textContent = c.subtitle;
+
           card.appendChild(sub);
+
         }
+
         var p = document.createElement('p');
+
         p.textContent = c.content;
+
         card.appendChild(p);
+
         customCards.appendChild(card);
+
       });
+
     }
+
     // Solar terms
+
     var solarContent = document.getElementById('solarContent');
+
     if (solarContent) {
+
       solarContent.innerHTML = data.custom.solarContent;
+
       solarContent.classList.add('fade-in');
+
     }
+
     // Taboos
+
     var tabooList = document.getElementById('tabooList');
+
     if (tabooList) {
+
       tabooList.innerHTML = '';
+
       data.custom.taboos.forEach(function(t) {
+
         var item = document.createElement('div');
+
         item.className = 'taboo-item fade-in';
+
         var h4 = document.createElement('h4');
+
         h4.textContent = t.title;
+
         item.appendChild(h4);
+
         var p = document.createElement('p');
+
         p.textContent = t.content;
+
         item.appendChild(p);
+
         tabooList.appendChild(item);
+
       });
+
     }
+
     // Building (建房讲究)
+
     var buildingContent = document.getElementById('buildingContent');
+
     if (buildingContent) {
+
       buildingContent.innerHTML = '';
+
       if (data.homeConstruction.image) {
+
         var imgWrap = document.createElement('div');
+
         imgWrap.className = 'home-image fade-in';
+
         var img = document.createElement('img');
+
         img.src = resolveImg(data.homeConstruction.image, 'images/');
+
         img.alt = data.homeConstruction.sectionTitle;
+
         img.loading = 'lazy';
+
         img.onerror = function() { imgWrap.style.display = 'none'; };
+
         imgWrap.appendChild(img);
+
         buildingContent.appendChild(imgWrap);
+
       }
+
       data.homeConstruction.paragraphs.forEach(function(text) {
+
         var p = document.createElement('p');
+
         p.className = 'home-paragraph fade-in';
+
         p.textContent = text;
+
         buildingContent.appendChild(p);
+
       });
+
       if (data.homeConstruction.subItems) {
+
         data.homeConstruction.subItems.forEach(function(sub) {
+
           var subDiv = document.createElement('div');
+
           subDiv.className = 'home-sub-item fade-in';
+
           var subTitle = document.createElement('h4');
+
           subTitle.className = 'home-sub-title';
+
           subTitle.textContent = sub.title;
+
           subDiv.appendChild(subTitle);
+
           if (sub.image) {
+
             var subImgWrap = document.createElement('div');
+
             subImgWrap.className = 'home-sub-image';
+
             var subImg = document.createElement('img');
+
             subImg.src = resolveImg(sub.image, 'images/');
+
             subImg.alt = sub.title;
+
             subImg.loading = 'lazy';
+
             subImg.onerror = function() { subImgWrap.style.display = 'none'; };
+
             subImgWrap.appendChild(subImg);
+
             subDiv.appendChild(subImgWrap);
+
           }
+
           var subP = document.createElement('p');
+
           subP.className = 'home-sub-paragraph';
+
           subP.textContent = sub.content;
+
           subDiv.appendChild(subP);
+
           buildingContent.appendChild(subDiv);
+
         });
+
       }
+
     }
+
     // Wedding & Funeral (婚丧仪式)
+
     var weddingContent = document.getElementById('weddingContent');
+
     if (weddingContent) {
+
       weddingContent.innerHTML = '';
+
       data.weddingFuneral.branches.forEach(function(branch) {
+
         var branchDiv = document.createElement('div');
+
         branchDiv.className = 'wf-branch fade-in';
+
         var branchTitle = document.createElement('h4');
+
         branchTitle.className = 'wf-branch-title';
+
         branchTitle.textContent = currentLang === 'zh' ? branch.title : branch.titleEn;
+
         branchDiv.appendChild(branchTitle);
+
         if (branch.image) {
+
           var branchImgWrap = document.createElement('div');
+
           branchImgWrap.className = 'wf-image';
+
           var branchImg = document.createElement('img');
+
           branchImg.src = resolveImg(branch.image, 'images/');
+
           branchImg.alt = currentLang === 'zh' ? branch.title : branch.titleEn;
+
           branchImg.loading = 'lazy';
+
           branchImg.onerror = function() { branchImgWrap.style.display = 'none'; };
+
           branchImgWrap.appendChild(branchImg);
+
           branchDiv.appendChild(branchImgWrap);
+
         }
+
         var p = document.createElement('p');
+
         p.className = 'wf-paragraph fade-in';
+
         p.textContent = branch.content;
+
         branchDiv.appendChild(p);
+
         weddingContent.appendChild(branchDiv);
+
       });
+
     }
+
   }
+
+
 
   /* ====== Objects ====== */
+
   function renderObjects() {
+
     setText('[data-i18n="object.sectionTitle"]', data.object.sectionTitle);
+
     setText('[data-i18n="object.sectionSubtitle"]', data.object.sectionSubtitle);
+
     setText('[data-i18n="object.description"]', data.object.description);
+
     var grid = document.getElementById('objectGrid');
+
     if (!grid) return;
+
     grid.innerHTML = '';
+
     data.object.items.forEach(function(item, index) {
+
       var card = document.createElement('div');
+
       card.className = 'object-card fade-in';
+
       card.style.cursor = 'pointer';
+
       var imageDiv = document.createElement('div');
+
       imageDiv.className = 'object-card-image';
+
       var img = document.createElement('img');
+
       img.src = resolveImg(item.image, 'images/object/');
+
       img.alt = item.name;
+
       img.loading = 'lazy';
+
       img.onerror = function() { imageDiv.innerHTML = '<span class="placeholder-icon">&#x2606;</span>'; };
+
       imageDiv.appendChild(img);
+
       card.appendChild(imageDiv);
+
       var nameEl = document.createElement('div');
+
       nameEl.className = 'object-card-name';
+
       nameEl.textContent = item.name;
+
       card.appendChild(nameEl);
+
       // Detail fields - each on a separate line
+
       var detailsDiv = document.createElement('div');
+
       detailsDiv.className = 'object-card-details';
+
       if (item.usage) {
+
         var usageRow = document.createElement('div');
+
         usageRow.className = 'object-detail-row';
+
         var usageLabel = document.createElement('span');
+
         usageLabel.className = 'object-detail-label';
+
         usageLabel.textContent = currentLang === 'zh' ? '用途：' : 'Usage: ';
+
         var usageValue = document.createElement('span');
+
         usageValue.className = 'object-detail-value';
+
         usageValue.textContent = item.usage;
+
         usageRow.appendChild(usageLabel);
+
         usageRow.appendChild(usageValue);
+
         detailsDiv.appendChild(usageRow);
+
       }
+
       if (item.location) {
+
         var locRow = document.createElement('div');
+
         locRow.className = 'object-detail-row';
+
         var locLabel = document.createElement('span');
+
         locLabel.className = 'object-detail-label';
+
         locLabel.textContent = currentLang === 'zh' ? '摆放位置：' : 'Location: ';
+
         var locValue = document.createElement('span');
+
         locValue.className = 'object-detail-value';
+
         locValue.textContent = item.location;
+
         locRow.appendChild(locLabel);
+
         locRow.appendChild(locValue);
+
         detailsDiv.appendChild(locRow);
+
       }
+
       if (item.status) {
+
         var statusRow = document.createElement('div');
+
         statusRow.className = 'object-detail-row';
+
         var statusLabel = document.createElement('span');
+
         statusLabel.className = 'object-detail-label';
+
         statusLabel.textContent = currentLang === 'zh' ? '使用情况：' : 'Status: ';
+
         var statusValue = document.createElement('span');
+
         statusValue.className = 'object-detail-value';
+
         var isInUse = item.status.includes('在用') || item.status.toLowerCase().includes('in use');
+
         statusValue.className += isInUse ? ' status-in-use' : ' status-not-in-use';
+
         statusValue.textContent = item.status;
+
         statusRow.appendChild(statusLabel);
+
         statusRow.appendChild(statusValue);
+
         detailsDiv.appendChild(statusRow);
+
       }
+
       card.appendChild(detailsDiv);
+
       var moreEl = document.createElement('span');
+
       moreEl.className = 'object-card-more';
+
       moreEl.textContent = currentLang === 'zh' ? '查看详情 →' : 'View Details →';
+
       card.appendChild(moreEl);
+
       card.addEventListener('click', function() { openObjectModal(index); });
+
       grid.appendChild(card);
+
     });
+
   }
+
+
 
   /* ====== Sounds ====== */
+
   function renderSounds() {
+
     setText('[data-i18n="sound.sectionTitle"]', data.sound.sectionTitle);
+
     setText('[data-i18n="sound.sectionSubtitle"]', data.sound.sectionSubtitle);
+
     setText('[data-i18n="sound.description"]', data.sound.description);
+
     var list = document.getElementById('soundList');
+
     if (!list) return;
+
     list.innerHTML = '';
+
     data.sound.entries.forEach(function(entry) {
+
       var card = document.createElement('div');
+
       card.className = 'sound-card fade-in';
+
       var catEl = document.createElement('div');
+
       catEl.className = 'sound-card-category';
+
       catEl.textContent = entry.category;
+
       card.appendChild(catEl);
+
       if (entry.performer) {
+
         var perfEl = document.createElement('div');
+
         perfEl.className = 'sound-card-performer';
+
         perfEl.textContent = entry.performer;
+
         card.appendChild(perfEl);
+
       }
+
       var descEl = document.createElement('div');
+
       descEl.className = 'sound-card-description';
+
       descEl.textContent = entry.description;
+
       card.appendChild(descEl);
+
       var mediaDiv = document.createElement('div');
+
       mediaDiv.className = 'sound-card-media';
+
       if (entry.videoLink) {
+
         var linkBtn = document.createElement('a');
+
         linkBtn.className = 'sound-video-btn';
+
         linkBtn.href = entry.videoLink;
+
         linkBtn.target = '_blank';
+
         linkBtn.rel = 'noopener noreferrer';
+
         linkBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>'
+
           + '<span>' + (currentLang === 'zh' ? '观看视频' : 'Watch Video') + '</span>';
+
         mediaDiv.appendChild(linkBtn);
+
         if (entry.audioNote) {
+
           var note = document.createElement('span');
+
           note.className = 'media-placeholder';
+
           note.textContent = entry.audioNote;
+
           mediaDiv.appendChild(note);
+
         }
+
       } else if (entry.audio) {
+
         var video = document.createElement('video');
+
         video.controls = true;
+
         video.preload = 'metadata';
+
         video.innerHTML = '<source src="' + entry.audio + '">';
+
         mediaDiv.appendChild(video);
+
         if (entry.audioNote) {
+
           var note = document.createElement('span');
+
           note.className = 'media-placeholder';
+
           note.textContent = entry.audioNote;
+
           mediaDiv.appendChild(note);
+
         }
+
       } else {
+
         var note = document.createElement('span');
+
         note.className = 'media-placeholder';
+
         note.textContent = entry.audioNote || (currentLang === 'zh' ? '暂无音视频资料' : 'No audio/video available');
+
         mediaDiv.appendChild(note);
+
       }
+
       card.appendChild(mediaDiv);
+
       list.appendChild(card);
+
     });
+
   }
+
+
 
   /* ====== People ====== */
+
   function renderPeople() {
+
     setText('[data-i18n="people.sectionTitle"]', data.people.sectionTitle);
+
     setText('[data-i18n="people.sectionSubtitle"]', data.people.sectionSubtitle);
+
     setText('[data-i18n="people.description"]', data.people.description);
+
     var grid = document.getElementById('peopleGrid');
+
     if (!grid) return;
+
     grid.innerHTML = '';
+
     data.people.profiles.forEach(function(profile) {
+
       var card = document.createElement('div');
+
       card.className = 'people-card fade-in';
+
       // Skip image area — no person photos available
+
       var body = document.createElement('div');
+
       body.className = 'people-card-body';
+
       var nameEl = document.createElement('div');
+
       nameEl.className = 'people-card-name';
+
       nameEl.textContent = profile.name + (profile.age ? ' · ' + profile.age : '');
+
       body.appendChild(nameEl);
+
       var roleEl = document.createElement('div');
+
       roleEl.className = 'people-card-role';
+
       roleEl.textContent = profile.role;
+
       body.appendChild(roleEl);
+
       var quoteEl = document.createElement('div');
+
       quoteEl.className = 'people-card-quote';
+
       quoteEl.textContent = profile.quote;
+
       body.appendChild(quoteEl);
+
       card.appendChild(body);
+
       grid.appendChild(card);
+
     });
+
   }
+
+
 
   /* ====== Products (4 sub-grids) ====== */
+
   function renderProducts() {
+
     setText('[data-i18n="products.sectionTitle"]', data.products.sectionTitle);
+
     setText('[data-i18n="products.sectionSubtitle"]', data.products.sectionSubtitle);
+
     setText('[data-i18n="products.description"]', data.products.description);
+
     // Category titles
+
     setText('[data-i18n="products.softFabrics.title"]', data.products.softFabrics.title);
+
     setText('[data-i18n="products.homeFurnishings.title"]', data.products.homeFurnishings.title);
+
     setText('[data-i18n="products.stationery.title"]', data.products.stationery.title);
+
     setText('[data-i18n="products.outdoor.title"]', data.products.outdoor.title);
+
     // Render 4 sub-grids
+
     renderProductGrid('productSoftGrid', data.products.softFabrics.items);
+
     renderProductGrid('productHomeGrid', data.products.homeFurnishings.items);
+
     renderProductGrid('productStationeryGrid', data.products.stationery.items);
+
     renderProductGrid('productOutdoorGrid', data.products.outdoor.items);
+
   }
+
+
 
   function renderProductGrid(gridId, items) {
+
     var grid = document.getElementById(gridId);
+
     if (!grid) return;
+
     grid.innerHTML = '';
+
     items.forEach(function(product) {
+
       var card = document.createElement('div');
+
       card.className = 'product-card fade-in';
+
       card.style.cursor = 'pointer';
+
       var imageDiv = document.createElement('div');
+
       imageDiv.className = 'product-card-image';
+
       var img = document.createElement('img');
+
       img.src = resolveImg(product.image, 'images/products/');
+
       img.alt = product.name;
+
       img.loading = 'lazy';
+
       img.onerror = function() { imageDiv.innerHTML = '<span class="placeholder-icon">&#x2606;</span>'; };
+
       imageDiv.appendChild(img);
+
       card.appendChild(imageDiv);
+
       var body = document.createElement('div');
+
       body.className = 'product-card-body';
+
       var nameEl = document.createElement('div');
+
       nameEl.className = 'product-card-name';
+
       nameEl.textContent = product.name;
+
       body.appendChild(nameEl);
+
       var priceEl = document.createElement('div');
+
       priceEl.className = 'product-card-price';
+
       priceEl.textContent = product.price;
+
       body.appendChild(priceEl);
+
       if (product.link) {
+
         card.addEventListener('click', function() { window.open(product.link, '_blank'); });
+
       } else {
+
         card.addEventListener('click', function() {
+
           alert(currentLang === 'zh' ? '购买链接即将上线，敬请期待！' : 'Purchase link coming soon!');
+
         });
+
       }
+
       card.appendChild(body);
+
       grid.appendChild(card);
+
     });
+
   }
+
+
 
   /* ====== Footer ====== */
+
   function renderFooter() {
+
     setText('[data-i18n="footer.text"]', data.footer.text);
+
   }
+
+
 
   /* ====== Bilingual Labels ====== */
+
   function renderBilingualLabels() {
+
     document.querySelectorAll('[data-i18n-label]').forEach(function(el) {
+
       var key = el.getAttribute('data-i18n-label');
+
       if (bilingualLabels[key]) {
+
         el.textContent = bilingualLabels[key][currentLang];
+
       }
+
     });
+
   }
+
+
 
   /* ====== Page Title ====== */
+
   function updatePageTitle() {
+
     if (currentLang === 'zh') {
+
       document.title = 'Staying Bifzixkar · 一部活着的土家族文化档案';
+
       document.documentElement.lang = 'zh-CN';
+
     } else {
+
       document.title = 'Staying Bifzixkar · A Living Archive of Tujia Culture';
+
       document.documentElement.lang = 'en';
+
     }
+
   }
+
+
 
   /* ====== Utility ====== */
+
   function setText(selector, text) {
+
     var el = document.querySelector(selector);
+
     if (el && text !== undefined && text !== null) {
+
       el.textContent = text;
+
     }
+
   }
+
+
 
   // Resolve image path: if value has no '/', prepend subdirectory
+
   function resolveImg(val, subdir) {
+
     if (!val) return '';
+
     return val.indexOf('/') >= 0 ? val : subdir + val;
+
   }
+
+
 
   /* ====== Navbar Scroll ====== */
+
   function initNavbar() {
+
     var navbar = document.getElementById('navbar');
+
     window.addEventListener('scroll', function() {
+
       if (window.scrollY > 80) {
+
         navbar.classList.add('scrolled');
+
       } else {
+
         navbar.classList.remove('scrolled');
+
       }
+
     });
+
   }
+
+
 
   /* ====== Mobile Nav ====== */
+
   function initMobileNav() {
+
     var toggle = document.getElementById('navToggle');
+
     var links = document.getElementById('navLinks');
+
     if (!toggle || !links) return;
+
     toggle.addEventListener('click', function() {
+
       toggle.classList.toggle('active');
+
       links.classList.toggle('active');
+
     });
+
     links.addEventListener('click', function(e) {
+
       if (e.target.tagName === 'A') {
+
         toggle.classList.remove('active');
+
         links.classList.remove('active');
+
       }
+
     });
+
   }
+
+
 
   /* ====== Back to Top ====== */
+
   function initBackToTop() {
+
     var btn = document.getElementById('backToTop');
+
     if (!btn) return;
+
     window.addEventListener('scroll', function() {
+
       if (window.scrollY > 400) {
+
         btn.classList.add('visible');
+
       } else {
+
         btn.classList.remove('visible');
+
       }
+
     });
+
     btn.addEventListener('click', function() {
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
+
     });
+
   }
+
+
 
   /* ====== Smooth Scroll ====== */
+
   function initSmoothScroll() {
+
     document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+
       anchor.addEventListener('click', function(e) {
+
         e.preventDefault();
+
         var targetId = this.getAttribute('href').substring(1);
+
         var target = document.getElementById(targetId);
+
         if (target) {
+
           var offset = 80;
+
           var top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+
           window.scrollTo({ top: top, behavior: 'smooth' });
+
         }
+
       });
+
     });
+
   }
+
+
 
   /* ====== Scroll Spy ====== */
+
   function initScrollSpy() {
+
     var sections = document.querySelectorAll('section[id], .custom-subsection[id], .product-subsection[id]');
+
     var navLinks = document.querySelectorAll('#navLinks a[data-section]');
+
     function onScroll() {
+
       var scrollPos = window.scrollY + 120;
+
       sections.forEach(function(section) {
+
         var top = section.offsetTop;
+
         var height = section.offsetHeight;
+
         var id = section.getAttribute('id');
+
         if (scrollPos >= top && scrollPos < top + height) {
+
           navLinks.forEach(function(link) {
+
             link.classList.remove('active');
+
             if (link.dataset.section === id) {
+
               link.classList.add('active');
+
             }
+
           });
+
         }
+
       });
+
     }
+
     window.addEventListener('scroll', onScroll);
+
     onScroll();
+
   }
+
+
 
   /* ====== Fade-in ====== */
+
   function initFadeIn() {
+
     var elements = document.querySelectorAll('.fade-in');
+
     if ('IntersectionObserver' in window) {
+
       var observer = new IntersectionObserver(function(entries) {
+
         entries.forEach(function(entry) {
+
           if (entry.isIntersecting) {
+
             entry.target.classList.add('visible');
+
             observer.unobserve(entry.target);
+
           }
+
         });
+
       }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
       elements.forEach(function(el) { observer.observe(el); });
+
     } else {
+
       elements.forEach(function(el) { el.classList.add('visible'); });
+
     }
+
   }
+
+
 
   /* ====== Pattern Modal ====== */
+
   function initModal() {
+
     var modal = document.getElementById('patternModal');
+
     if (!modal) return;
+
     var closeBtn = document.getElementById('modalClose');
+
     var overlay = modal.querySelector('.modal-overlay');
+
     closeBtn.addEventListener('click', closePatternModal);
+
     overlay.addEventListener('click', closePatternModal);
+
     document.addEventListener('keydown', function(e) {
+
       if (e.key === 'Escape') {
+
         if (modal.classList.contains('active')) closePatternModal();
+
         var lb = document.getElementById('lightbox');
+
         if (lb && lb.classList.contains('active')) closeLightbox();
+
       }
+
     });
+
   }
+
+
 
   function openPatternModal(index) {
+
     var pattern = data.weave.patterns[index];
+
     var modal = document.getElementById('patternModal');
+
     var body = document.getElementById('modalBody');
+
     body.innerHTML = '';
+
     var h3 = document.createElement('h3');
+
     h3.textContent = pattern.name;
+
     body.appendChild(h3);
+
     if (pattern.nameEn && pattern.nameEn !== pattern.name) {
+
       var enName = document.createElement('p');
+
       enName.style.cssText = 'font-size:0.95rem;color:#666;margin-bottom:8px;';
+
       enName.textContent = pattern.nameEn;
+
       body.appendChild(enName);
+
     }
+
     if (pattern.tujiaName) {
+
       var tujia = document.createElement('div');
+
       tujia.className = 'modal-tujia';
+
       tujia.textContent = pattern.tujiaName;
+
       body.appendChild(tujia);
+
     }
+
     if (pattern.image) {
+
       var imgWrap = document.createElement('div');
+
       imgWrap.style.cssText = 'position:relative;width:100%;padding-bottom:66.67%;border-radius:8px;margin:20px 0;background:#f5f0e8;overflow:hidden;';
+
       var img = document.createElement('img');
+
       img.src = resolveImg(pattern.image, 'images/weave/');
+
       img.alt = pattern.name;
+
       img.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block;cursor:zoom-in;';
+
       img.onclick = function() { openLightbox(resolveImg(pattern.image, 'images/weave/')); };
+
       img.onerror = function() {
+
         imgWrap.innerHTML = '<div style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#999;font-size:0.9rem;">' + (currentLang === 'zh' ? '图片待上传' : 'Image pending') + '</div>';
+
       };
+
       imgWrap.appendChild(img);
+
       body.appendChild(imgWrap);
+
     }
+
     var symTitle = document.createElement('div');
+
     symTitle.className = 'modal-section-title';
+
     symTitle.textContent = currentLang === 'zh' ? '象征寓意' : 'Symbolism';
+
     body.appendChild(symTitle);
+
     var symP = document.createElement('p');
+
     symP.textContent = pattern.symbolism;
+
     body.appendChild(symP);
+
     var histTitle = document.createElement('div');
+
     histTitle.className = 'modal-section-title';
+
     histTitle.textContent = currentLang === 'zh' ? '口述历史' : 'Oral History';
+
     body.appendChild(histTitle);
+
     var histP = document.createElement('p');
+
     histP.textContent = pattern.oralHistory;
+
     body.appendChild(histP);
+
     modal.classList.add('active');
+
     document.body.style.overflow = 'hidden';
+
   }
+
+
 
   function closePatternModal() {
+
     var modal = document.getElementById('patternModal');
+
     if (modal) {
+
       modal.classList.remove('active');
+
       document.body.style.overflow = '';
+
     }
+
   }
+
+
 
   function openObjectModal(index) {
+
     var item = data.object.items[index];
+
     var modal = document.getElementById('patternModal');
+
     var body = document.getElementById('modalBody');
+
     body.innerHTML = '';
+
     var h3 = document.createElement('h3');
+
     h3.textContent = item.name;
+
     body.appendChild(h3);
+
     if (item.image) {
+
       var imgWrap = document.createElement('div');
+
       imgWrap.style.cssText = 'position:relative;width:100%;padding-bottom:66.67%;border-radius:8px;margin:20px 0;background:#f5f0e8;overflow:hidden;';
+
       var img = document.createElement('img');
+
       img.src = resolveImg(item.image, 'images/object/');
+
       img.alt = item.name;
+
       img.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block;cursor:zoom-in;';
+
       img.onclick = function() { openLightbox(resolveImg(item.image, 'images/object/')); };
+
       img.onerror = function() {
+
         imgWrap.innerHTML = '<div style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#999;font-size:0.9rem;">' + (currentLang === 'zh' ? '图片待上传' : 'Image pending') + '</div>';
+
       };
+
       imgWrap.appendChild(img);
+
       body.appendChild(imgWrap);
+
     }
+
     var fields = [
+
       { label: currentLang === 'zh' ? '用途' : 'Usage', value: item.usage },
+
       { label: currentLang === 'zh' ? '摆放位置' : 'Location', value: item.location },
+
       { label: currentLang === 'zh' ? '使用情况' : 'Status', value: item.status }
+
     ];
+
     fields.forEach(function(field) {
+
       if (field.value) {
+
         var title = document.createElement('div');
+
         title.className = 'modal-section-title';
+
         title.textContent = field.label;
+
         body.appendChild(title);
+
         var p = document.createElement('p');
+
         p.textContent = field.value;
+
         body.appendChild(p);
+
       }
+
     });
+
     modal.classList.add('active');
+
     document.body.style.overflow = 'hidden';
+
   }
+
+
 
   /* ====== Lightbox ====== */
+
   function openLightbox(src) {
+
     var lb = document.getElementById('lightbox');
+
     var img = document.getElementById('lightboxImg');
+
     if (lb && img) {
+
       img.src = src;
+
       lb.classList.add('active');
+
     }
-  }
-  function closeLightbox() {
-    var lb = document.getElementById('lightbox');
-    if (lb) lb.classList.remove('active');
-  }
-  var _lbEl = document.getElementById('lightbox');
-  if (_lbEl) {
-    _lbEl.addEventListener('click', function(e) {
-      if (e.target === this || e.target.id === 'lightboxImg') closeLightbox();
-    });
+
   }
 
-  /* ====== Start ====== */
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
+  function closeLightbox() {
+
+    var lb = document.getElementById('lightbox');
+
+    if (lb) lb.classList.remove('active');
+
   }
+
+  var _lbEl = document.getElementById('lightbox');
+
+  if (_lbEl) {
+
+    _lbEl.addEventListener('click', function(e) {
+
+      if (e.target === this || e.target.id === 'lightboxImg') closeLightbox();
+
+    });
+
+  }
+
+
+
+  /* ====== Start ====== */
+
+  if (document.readyState === 'loading') {
+
+    document.addEventListener('DOMContentLoaded', init);
+
+  } else {
+
+    init();
+
+  }
+
 })();
+
