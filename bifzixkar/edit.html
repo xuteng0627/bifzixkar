@@ -853,6 +853,15 @@ async function saveAll(){
     var tpl=document.getElementById('appjs-template').textContent;
     if(!tpl){toast('请先加载 app.js',1);return}
 
+    // Update APP_VERSION timestamp so live site auto-refreshes (bypasses CDN cache)
+    var now=new Date();
+    var ts=now.getFullYear()
+      +String(now.getMonth()+1).padStart(2,'0')
+      +String(now.getDate()).padStart(2,'0')
+      +String(now.getHours()).padStart(2,'0')
+      +String(now.getMinutes()).padStart(2,'0');
+    tpl=tpl.replace(/APP_VERSION\s*=\s*['"][^'"]*['"]/, "APP_VERSION = '"+ts+"'");
+
     // Deep-merge edited data with original parsed data to preserve unknown fields
     // deepMerge now handles arrays element-by-element, preserving orig values for empty edited fields
     var zhMerged = deepMerge(S._origZh, S.zh);
